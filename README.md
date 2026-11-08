@@ -1,20 +1,23 @@
-# TungTungTung IP Portal
+# TungTungTung server viewer
 
-This repository hosts a simple GitHub Pages website with an iframe pointed at `https://51.81.224.132/`.
+GitHub Pages website: https://damonrosshutchins-boop.github.io/tungtungtung/
 
-## Publish
+The viewer lets you provide a working HTTPS website address and try to show it inside an iframe.
 
-1. Open **Settings → Pages** in this repository.
-2. Under **Build and deployment**, select **Deploy from a branch**.
-3. Choose branch **main**, folder **/ (root)**, then **Save**.
-4. When GitHub Pages is ready, visit https://damonrosshutchins-boop.github.io/tungtungtung/
+## What changed
 
-## Embedding requirements
+The old page immediately loaded `https://51.81.224.132/` in an iframe, resulting in a browser TLS error. On November 8, 2026, connection attempts to `51.81.224.132` on ports 80 and 443 were refused from the testing environment. The page now shows a clear setup message instead of auto-loading the broken frame. It also offers a URL field to try a working HTTPS address later.
 
-- The server at `51.81.224.132` must be a reachable web server using HTTPS, generally port 443.
-- It must present a valid TLS certificate for its address (usually easiest via a domain name).
-- It must allow framing by this GitHub Pages origin; restrictive `X-Frame-Options` or `Content-Security-Policy: frame-ancestors` headers will block the iframe.
-- GitHub Pages is HTTPS, so browser mixed-content protection prevents embedding plain `http://` URLs.
-- If the IP is not hosting an HTTPS website, this page cannot make it run in an iframe by itself. It does not act as a reverse proxy.
+## Why the IP won't display yet
 
-You can update the `src` and action URLs in `index.html` if the server later uses a different HTTPS hostname.
+- An iframe embeds a **web page**, not a remote desktop, game server, SSH connection, or arbitrary TCP service.
+- The upstream server must be reachable on its web port and return HTML over **HTTPS** with a valid TLS certificate.
+- For GitHub Pages, plain `http://` cannot be embedded because of browser mixed-content protections.
+- The upstream must permit framing via its `Content-Security-Policy: frame-ancestors` and/or `X-Frame-Options` settings.
+- JavaScript on GitHub Pages cannot fix an unavailable server, bypass a certificate error, or defeat a server's framing restrictions.
+
+If you control the IP server, install/configure a web server, point a domain to the IP, enable HTTPS with a valid certificate, and permit framing from `https://damonrosshutchins-boop.github.io` where appropriate. Then enter that HTTPS domain in the viewer.
+
+## Enable GitHub Pages
+
+Under repository **Settings → Pages**, select **Deploy from a branch**, branch **main**, folder **/(root)**, and save.
