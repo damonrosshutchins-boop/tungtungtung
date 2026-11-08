@@ -1,44 +1,107 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>TungTungTung • IP Portal</title>
+  <title>TungTungTung • Server Viewer</title>
   <style>
-    :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
-    *{box-sizing:border-box}html,body{height:100%;margin:0}
-    body{min-height:100dvh;display:flex;flex-direction:column;background:#0b1020;color:#e9efff}
-    header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:12px 18px;background:#111c34;border-bottom:1px solid #2a3751}
-    h1{font-size:17px;margin:0}small{display:block;color:#a7b6d0;margin-top:3px}
-    nav{display:flex;flex-wrap:wrap;gap:8px}
-    button,.button{font:inherit;font-size:13px;border-radius:8px;border:1px solid #486083;color:#f5f8ff;background:#213451;padding:9px 12px;cursor:pointer;text-decoration:none}
-    button:hover,.button:hover{background:#355175}
-    main{position:relative;flex:1;min-height:55vh;background:#fff}
-    iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
-    footer{padding:10px 18px;color:#b8c7e0;font-size:12px;line-height:1.5;border-top:1px solid #2a3751}
-    footer a{color:#a4d2ff}
+    :root { font-family: system-ui, -apple-system, Segoe UI, sans-serif; color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { margin:0; height:100%; }
+    body { background:#0b1222; color:#ecf3ff; display:flex; flex-direction:column; min-height:100dvh; }
+    header { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; padding:14px 18px; background:#132039; border-bottom:1px solid #334462; }
+    h1 { margin:0; font-size:1.1rem; }
+    header p { margin:3px 0 0; font-size:.86rem; color:#a6b9d7; }
+    nav { display:flex; gap:8px; flex-wrap:wrap; }
+    button, a.button { cursor:pointer; font:inherit; border:1px solid #5574a4; background:#263b5f; color:white; border-radius:9px; padding:9px 12px; text-decoration:none; }
+    button:hover, a.button:hover { background:#39537b; }
+    main { position:relative; flex:1; min-height:65vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .panel { max-width:650px; width:100%; border:1px solid #304969; border-radius:16px; background:#16253f; padding:25px; box-shadow:0 15px 50px #0005; }
+    .panel h2 { margin:0 0 10px; font-size:1.4rem; }
+    .panel p { color:#c2d1e6; line-height:1.6; }
+    .panel strong { color:#fff; }
+    .panel code { color:#dceaff; overflow-wrap:anywhere; }
+    form { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    label { width:100%; font-size:.95rem; font-weight:600; }
+    input { min-width:240px; flex:1; padding:11px; border:1px solid #6882a8; background:#0a1730; border-radius:9px; color:white; font:inherit; }
+    .hint { font-size:.88rem; }
+    .error { color:#ffce8e !important; font-size:.9rem; }
+    #remote { position:absolute; inset:0; border:0; width:100%; height:100%; background:white; }
+    #remote[hidden], .panel[hidden] { display:none; }
+    footer { padding:11px 18px; font-size:.8rem; color:#a6b9d7; border-top:1px solid #334462; }
+    footer a { color:#a5caff; }
   </style>
 </head>
 <body>
   <header>
-    <div><h1>TungTungTung • IP Portal</h1><small>Target server: 51.81.224.132</small></div>
-    <nav aria-label="Viewer controls">
-      <button type="button" id="reload">Reload</button>
-      <button type="button" id="fullscreen">Fullscreen</button>
-      <a class="button" target="_blank" rel="noopener noreferrer" href="https://51.81.224.132/">Open server</a>
+    <div>
+      <h1>TungTungTung • Server Viewer</h1>
+      <p>Original server: 51.81.224.132</p>
+    </div>
+    <nav>
+      <button type="button" id="back" hidden>Connection settings</button>
+      <button type="button" id="reload" hidden>Reload iframe</button>
+      <button type="button" id="fullscreen" hidden>Fullscreen</button>
+      <a class="button" id="open" href="https://51.81.224.132/" target="_blank" rel="noopener noreferrer">Open server directly</a>
     </nav>
   </header>
   <main>
-    <iframe id="remote" title="Embedded server at 51.81.224.132" src="https://51.81.224.132/" allowfullscreen referrerpolicy="no-referrer"></iframe>
+    <section class="panel" id="panel" aria-labelledby="statusTitle">
+      <h2 id="statusTitle">Server connection needs setup</h2>
+      <p>We checked <strong>51.81.224.132</strong> on November 8, 2026, and it refused connections on standard HTTP (80) and HTTPS (443) ports from our testing environment. This caused the browser's <code>SSL_ERROR_INTERNAL_ERROR_ALERT</code> message when the page tried to embed it.</p>
+      <p>For an iframe on GitHub Pages to work, the destination must be a <strong>working HTTPS website</strong>, with a valid certificate and headers that allow embedding. If the address is a game server or another non-web service, an iframe cannot display it.</p>
+      <form id="connectForm">
+        <label for="url">Server's working HTTPS website address</label>
+        <input id="url" type="url" inputmode="url" spellcheck="false" value="https://51.81.224.132/" required aria-describedby="warning">
+        <button type="submit">Try iframe</button>
+      </form>
+      <p class="hint" id="warning">Only use an HTTPS web address. A domain with a valid TLS certificate is usually needed; this form does not bypass SSL errors.</p>
+      <p class="error" id="error" role="alert" hidden></p>
+    </section>
+    <iframe id="remote" title="Embedded HTTPS website" referrerpolicy="no-referrer" allowfullscreen hidden></iframe>
   </main>
   <footer>
-    The iframe requires a reachable HTTPS website at 51.81.224.132 with a valid certificate and permission to be embedded. GitHub Pages cannot embed an HTTP-only site. If the frame is blank, <a href="http://51.81.224.132/" target="_blank" rel="noopener noreferrer">check the HTTP address directly</a>. This is an embed, not a proxy.
+    This is a browser iframe, not a proxy. GitHub Pages cannot repair an unreachable upstream server, install its TLS certificate, or override iframe-blocking headers.
   </footer>
   <script>
-    const frame=document.getElementById('remote');
-    document.getElementById('reload').addEventListener('click',()=>{frame.src='https://51.81.224.132/';});
-    document.getElementById('fullscreen').addEventListener('click',()=>{frame.requestFullscreen?.().catch(()=>{});});
+    const panel = document.getElementById('panel');
+    const frame = document.getElementById('remote');
+    const input = document.getElementById('url');
+    const error = document.getElementById('error');
+    const open = document.getElementById('open');
+    const back = document.getElementById('back');
+    const reload = document.getElementById('reload');
+    const fullscreen = document.getElementById('fullscreen');
+    document.getElementById('connectForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let parsed;
+      try { parsed = new URL(input.value.trim()); }
+      catch { error.textContent='Enter a valid HTTPS URL.'; error.hidden=false; return; }
+      if (parsed.protocol !== 'https:') {
+        error.textContent='GitHub Pages cannot embed an HTTP-only website. Use a working HTTPS address.';
+        error.hidden=false;
+        return;
+      }
+      error.hidden=true;
+      frame.src=parsed.href;
+      open.href=parsed.href;
+      frame.hidden=false;
+      panel.hidden=true;
+      back.hidden=reload.hidden=fullscreen.hidden=false;
+    });
+    back.addEventListener('click', function() {
+      frame.hidden=true;
+      frame.removeAttribute('src');
+      panel.hidden=false;
+      back.hidden=reload.hidden=fullscreen.hidden=true;
+    });
+    reload.addEventListener('click', function() {
+      if(frame.src) frame.src=frame.src;
+    });
+    fullscreen.addEventListener('click', function() {
+      if (!frame.hidden && frame.requestFullscreen) frame.requestFullscreen().catch(()=>{});
+    });
   </script>
 </body>
 </html>
