@@ -4,46 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>TungTungTung • Sillypup Viewer</title>
+  <title>TungTungTung</title>
   <style>
-    :root { color-scheme:dark; font-family:system-ui,-apple-system,Segoe UI,sans-serif; }
-    * {box-sizing:border-box}
-    html, body {height:100%;margin:0}
-    body {min-height:100dvh;display:flex;flex-direction:column;background:#0c1425;color:#ecf3ff}
-    header {background:#152139;border-bottom:1px solid #354564;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-    h1 {font-size:1.1rem;margin:0}
-    small {color:#afc2df}
-    nav {display:flex;flex-wrap:wrap;gap:8px}
-    button,.button {font:inherit;font-size:.9rem;cursor:pointer;padding:9px 13px;border:1px solid #526e96;border-radius:9px;color:white;background:#253c61;text-decoration:none}
-    button:hover,.button:hover {background:#39557e}
-    main {position:relative;flex:1;min-height:65vh}
-    iframe {width:100%;height:100%;position:absolute;inset:0;border:0;background:white}
-    footer {font-size:.8rem;padding:10px 16px;background:#152139;color:#b5c7e2}
-    footer a {color:#b1d8ff}
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #101828;
+    }
+    iframe {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      border: 0;
+      background: #fff;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <h1>TungTungTung</h1>
-      <small>Embedded site: sillypup.cfd</small>
-    </div>
-    <nav>
-      <button id="reload" type="button">Reload</button>
-      <button id="fullscreen" type="button">Fullscreen</button>
-      <a class="button" href="https://sillypup.cfd/" target="_blank" rel="noopener noreferrer">Open original</a>
-    </nav>
-  </header>
-  <main>
-    <iframe id="remote" src="https://sillypup.cfd/" title="Sillypup website" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  </main>
-  <footer>
-    If the embedded site is blank or refuses to connect, open the original site. Some websites block iframe embedding through security headers, which GitHub Pages cannot override.
-  </footer>
-  <script>
-    const frame=document.getElementById('remote');
-    document.getElementById('reload').addEventListener('click',()=>{ frame.src='https://sillypup.cfd/'; });
-    document.getElementById('fullscreen').addEventListener('click',()=>{ frame.requestFullscreen?.().catch(()=>{}); });
-  </script>
+  <!-- The iframe loads automatically as soon as this page is opened. -->
+  <iframe
+    src="https://sillypup.cfd/"
+    title="Sillypup"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  ></iframe>
 </body>
 </html>
